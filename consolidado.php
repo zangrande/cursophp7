@@ -1,4 +1,68 @@
-<?php  
+<?php 	
+
+spl_autoload_register(function($class_name){
+
+	$file_name = "class". DIRECTORY_SEPARATOR .$class_name.".php";
+
+	//echo $class_name.":::<br>";
+
+	if (file_exists($file_name)){
+		require_once($file_name);
+	}
+	
+});
+
+	$root = new Usuario();
+	$root->loadID(1);
+	echo $root;
+
+
+class Sql extends PDO {
+
+	private $conn;
+
+	public function __construct(){
+
+		$this->conn = new PDO("mysql:host=localhost;dbname=dbphp7","root","");
+		//PDO("mysql:dbname=dbphp7;host=localhost","root","")
+
+	}
+
+	private function setParams($statment, $parameters = array()){
+		foreach ($parameters as $key => $value) {
+			$this->setParam($statment,$key,$value);		
+		}
+	}
+
+	private function setParam($statment, $key, $value){
+		$statment->bindParam($key,$value);	
+	}
+
+	public function query($rawQuery,$params = array()){
+
+		$stmt = $this->conn->prepare($rawQuery);
+
+		$this->setParams($stmt,$params);
+
+		$stmt->execute();
+
+		return $stmt;
+
+	}
+
+	public function select($rawQuery,$Params = array())//:array
+	{
+		$stmt = $this->query($rawQuery,$Params);
+		
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		//return $Params; 
+	}
+
+}
+
+
+
 class Usuario{
 	
 	private $idusuario;
@@ -59,43 +123,6 @@ class Usuario{
 
 	}
 
-	public static function getList(){ //Metodo estático
-		//Este método busca todos os usuarios
-		$sql = new Sql();
-		return $sql->select("SELECT * FROM tb_usuarios ORDER BY deslogin");
-	}
-
-	public static function search($login){
-		$sql = new Sql();
-		return $sql->select("SELECT * FROM tb_usuarios WHERE deslogin LIKE :SEARCH ORDER BY deslogin", array(
-			':SEARCH'=>"%".$login."%"
-		));
-	}
-
-	public function login($login,$senha){
-		$sql = new Sql();
-		$results = $sql->select("SELECT * FROM tb_usuarios WHERE deslogin LIKE :LOGIN AND dessenha LIKE :PASS", array(
-			':LOGIN'=>$login,
-			':PASS'=>$senha
-
-	));
-
-		//if (isset($results[0])) ou
-
-		if (count($results) > 0){
-
-			$row = $results[0]; //Busca por ID retorna apenas um registro
-
-			$this->setIdUsuario($row['idusuario']);			
-			$this->setDeslogin($row['deslogin']);
-			$this->setDessenha($row['dessenha']);
-			$this->setDtCadastro(new DateTime($row['dtcadastro']));
-			
-		} else {
-			throw new Exception("Login/Senha inválidos");
-		}
-	}
-
 
 		public function __toString(){
 
@@ -108,5 +135,8 @@ class Usuario{
 		}
 
 }
+
+
+
 
 ?>

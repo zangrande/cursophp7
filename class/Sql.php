@@ -7,8 +7,10 @@ private $conn;
 
 public function __construct(){
 
-	$this->conn = new PDO("mysql:host=localhost;dbname=dbphp7","root","");
+	//$this->conn = new PDO("mysql:host=localhost;dbname=dbphp7","root","");
 	//PDO("mysql:dbname=dbphp7;host=localhost","root","")
+
+	$this->conn = new PDO("mysql:host=localhost;dbname=dbphp7","tcontrol2","JykuVLjYoKGf6vq5");
 
 }
 
