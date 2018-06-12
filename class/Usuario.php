@@ -50,10 +50,7 @@ class Usuario{
 
 			$row = $results[0]; //Busca por ID retorna apenas um registro
 
-			$this->setIdUsuario($row['idusuario']);			
-			$this->setDeslogin($row['deslogin']);
-			$this->setDessenha($row['dessenha']);
-			$this->setDtCadastro(new DateTime($row['dtcadastro']));
+			$this->setData($results[0]);
 			
 		}
 
@@ -84,16 +81,57 @@ class Usuario{
 
 		if (count($results) > 0){
 
-			$row = $results[0]; //Busca por ID retorna apenas um registro
+			//$row = $results[0]; //Busca por ID retorna apenas um registro
 
-			$this->setIdUsuario($row['idusuario']);			
-			$this->setDeslogin($row['deslogin']);
-			$this->setDessenha($row['dessenha']);
-			$this->setDtCadastro(new DateTime($row['dtcadastro']));
+			$this->setData($results[0]);
 			
 		} else {
 			throw new Exception("Login/Senha inválidos");
 		}
+	}
+
+	public function insert(){
+		$sql = new Sql();
+
+		//Chamando a procedure: CALL sp_usuarios_insert ( deve estar gravada no bd )
+		$results = $sql->select("CALL sp_usuarios_insert(:LOGIN,:SENHA)",array(
+				':LOGIN'=>$this->getDeslogin(),
+				':SENHA'=>$this->getDessenha()
+
+			));
+
+			if ( count($results) > 0 ) {
+				$this->setData($results[0]);
+			}
+		
+	}
+
+	public function update($login,$password){
+
+		$this->setDeslogin($login);
+		$this->setDessenha($password);
+
+		$sql = new Sql();
+		$sql->query("UPDATE tb_usuarios SET deslogin = :LOGIN, dessenha = :PASSWORD WHERE idusuario = :ID", array(
+			':LOGIN'=>$this->getDeslogin(),
+			':PASSWORD'=>$this->getDessenha(),
+			':ID'=>$this->getIdusuario()
+		));
+	}
+
+	public function __construct($loagin = "",$password = ""){
+			//Este parãmetros ( $loagin = "",$password = "" ) aceitam chamada sem valores
+			//Se passar executa, senão , não....
+			$this->setDeslogin($loagin);
+			$this->setDessenha($password);
+
+	}
+
+	public function setData($data){
+			$this->setIdUsuario($data['idusuario']);			
+			$this->setDeslogin($data['deslogin']);
+			$this->setDessenha($data['dessenha']);
+			$this->setDtCadastro(new DateTime($data['dtcadastro']));
 	}
 
 

@@ -7,11 +7,11 @@
 	//echo json_encode($usuarios);
 
 
-	/* chama um usuário específico de acordo com a ID
-	$root = new Usuario();
-	$root->loadID(1);
-	echo $root;
-	*/
+	// chama um usuário específico de acordo com a ID
+	//$root = new Usuario();
+	//$root->loadID(12);
+	//echo $root;
+	
 
 
 	/*
@@ -25,7 +25,22 @@
 
 
 	//carregar um usaurio de acordo com o logi e senha
-	$logar = new Usuario();
-	$logar->login("user","12345");
-	echo $logar;
+	//$logar = new Usuario();
+	//$logar->login("Joca","123");
+	//echo $logar;
+
+	//iNSERIR DADOS
+	//$aluno = new Usuario("Zeca","zangrjo");
+	//$aluno->insert();
+	//echo $aluno;
+
+	//ATUALIZAR DADOS
+	$aluno = new Usuario();
+	$aluno->loadID(12);
+	$aluno->update("Nitro","gas");
+	
+
+	echo $aluno;
+
+
 ?>
