@@ -119,6 +119,20 @@ class Usuario{
 		));
 	}
 
+
+	public function delete(){
+		$sql = new Sql();
+		$sql->query("DELETE FROM tb_usuarios WHERE idusuario = :ID", array(
+			':ID'=>$this->getIdusuario()
+		));
+
+		$this->setIdusuario(0); //Apagando da memória do objeto
+		$this->setDeslogin(""); //Apagando da memória do objeto
+		$this->setDessenha(""); //Apagando da memória do objeto
+		$this->setDtCadastro(new DateTime()); //Data atual
+
+	}
+
 	public function __construct($loagin = "",$password = ""){
 			//Este parãmetros ( $loagin = "",$password = "" ) aceitam chamada sem valores
 			//Se passar executa, senão , não....

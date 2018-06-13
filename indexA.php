@@ -35,12 +35,17 @@
 	//echo $aluno;
 
 	//ATUALIZAR DADOS
-	$aluno = new Usuario();
-	$aluno->loadID(12);
-	$aluno->update("Nitro","gas");
+	//$aluno = new Usuario();
+	//$aluno->loadID(12);
+	//$aluno->update("Nitro","gas");
+	//echo $aluno;
+
+
+	//DELETANDO UM USUARIO
+	$usuario = new Usuario();
+	$usuario->loadID(12);
+	$usuario->delete();
+
+	echo $usuario;
 	
-
-	echo $aluno;
-
-
 ?>
